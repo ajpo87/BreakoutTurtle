@@ -90,17 +90,40 @@ def ball_wall_collision():
         ball.dx *= -1
 
 
+# Keep score and end the game
+score = 0
+scoreboard = turtle.Turtle()
+scoreboard.hideturtle()
+scoreboard.penup()
+scoreboard.goto(-270, 250)
+scoreboard.color("white")
+scoreboard.write("Score: {}".format(score), align="left", font=("Courier", 24, "normal"))
+
+game_over = turtle.Turtle()
+game_over.hideturtle()
+game_over.penup()
+game_over.goto(0, 0)
+game_over.write("GAME OVER", align="center", font=("Courier", 36, "normal"))
+game_over.hideturtle()
 while True:
     screen.update()
     time.sleep(0.01)
     # Move the ball
     ball.setx(ball.xcor() + ball.dx)
     ball.sety(ball.ycor() + ball.dy)
+
     # Detect collisions
     if ball_paddle_collision():
         ball.dy *= -1
     if ball_brick_collision():
         ball.dy *= -1
+        score += 10
+        scoreboard.clear()
+        scoreboard.write("Score: {}".format(score), align="left", font=("Courier", 24, "normal"))
     ball_wall_collision()
 
+    # End the game if all the bricks are destroyed
+    if not any(bricks):
+        game_over.write("YOU WIN!", align="center", font=("Courier", 36, "normal"))
+        break
 turtle.done()
